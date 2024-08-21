@@ -1,236 +1,232 @@
-# 【瀚文】HelloWord-Smart Keyboard
+# 【HanWen】HelloWord-Smart Keyboard
 
 ![hw1](5.Docs/2.Images/hw1.jpg)
 
-> `瀚文` 智能键盘是一把我为自己使用需求设计的 **多功能**、**模块化** 机械键盘。
+> The `HanWen` smart keyboard is a **multi-functional**, **modular** mechanical keyboard that I designed for my own usage needs.
 >
-> 键盘使用模块化设计，左侧的**多功能场景交互模块**可以替换成各种自定义组件，默认使用的是一个带电子墨水屏以及FOC力反馈旋钮的`Dynamic组件`；键盘使用我自己开发的基于ARM Cortex-M芯片的键盘固件以及模块固件；键盘本体使用移位寄存器方式实现优化的按键扫描电路；模块以及键盘本体可以单独使用，也可以通过串口协议进行相互通信和调用。
+> The keyboard uses a modular design, with the **multi-functional scene interaction module** on the left side that can be replaced with various custom components. The default is a `Dynamic component` with an e-ink screen and FOC force feedback knob. The keyboard uses a keyboard firmware and module firmware I developed myself based on ARM Cortex-M chips. The keyboard body uses shift registers to implement an optimized key scanning circuit. The modules and keyboard body can be used independently or communicate with each other via serial protocol.
 >
-> **本仓库开源的资料内容包括：**
+> **The open source materials in this repository include:**
 >
-> * 瀚文本体硬件设计的10块PCB设计源文件，提供立创EDA专业版的文件格式
-> * 外壳设计结构文件
-> * 键盘本体的固件源码（已相对完善）
-> * Dynamic组件的固件源码（已完成框架，更多APP扩展WIP）
-> * 键盘二次开发SDK（开发中）
+> * Source files for the hardware design of 10 PCBs for the HanWen body, provided in LCEDA Professional file format
+> * Shell design structure files  
+> * Firmware source code for the keyboard body (relatively complete)
+> * Firmware source code for the Dynamic component (framework completed, more APP extensions WIP)
+> * Keyboard secondary development SDK (in development)
 >
-> **键盘功能演示可以参考：**
+> **For keyboard function demonstrations, please refer to:**
 >
-> * [【自制】我做了一把 模 块 化 机 械 键 盘 !【软核】_哔哩哔哩_bilibili](https://www.bilibili.com/video/BV19V4y1J7Hx)
+> * [【DIY】I made a modular mechanical keyboard!【Soft Core】_bilibili](https://www.bilibili.com/video/BV19V4y1J7Hx)
 >
 > * [I Made A Customized Modular Keyboard ! - YouTube](https://www.youtube.com/watch?v=mGShD9ZER1c)
 
-**注意：Issues里面是讨论项目开发相关话题的，不要在里面发无意义的消息，不然watch了仓库的人都会收到通知邮件会给别人造成困扰的！！！灌水可以在仓库的Discuss里讨论！**
+**Note: The Issues section is for discussing project development related topics. Please do not post meaningless messages there, as people who have watched the repository will receive notification emails and it will cause disturbance to others!!! Chatting can be discussed in the repository's Discussions section!**
 
 ---
 
-## 1. 项目说明
+## 1. Project Description
 
-### 1.0 更新说明：
-**23.2.20更新**
-* 修改`CUSTOM_HID_EPOUT_ADDR = 2`，HID_RxCpltCallback位置变更到CUSTOM_HID_OutEvent_FS中（原来的位置可能导致while循环内无法发送report）。
+### 1.0 Update Notes:
+**23.2.20 Update**
+* Modified `CUSTOM_HID_EPOUT_ADDR = 2`, HID_RxCpltCallback position changed to CUSTOM_HID_OutEvent_FS (the original position may cause inability to send reports within the while loop).
 
-  > * main里面增加了RGB控制相关代码，可以通过HID协议发送数据包来控制键盘RGB效果
-  > * 已对接SignalRGB，Software中添加SignalRGB插件
-  > * report包大小33字节，前三个字节依次为reportid(本项目为2)、控制命令（0xAC（上位机控制），0xBD（关闭上位机控制），report包次序（一个包最多传10个RGB值，需要多个包拼接，从0计算）；后30字节为RGB值。
+  > * Added RGB control related code in main, can control keyboard RGB effects by sending data packets via HID protocol
+  > * Integrated with SignalRGB, added SignalRGB plugin in Software
+  > * Report packet size is 33 bytes, the first three bytes are reportid (2 for this project), control command (0xAC (PC control), 0xBD (disable PC control)), report packet sequence (one packet can transmit up to 10 RGB values, multiple packets need to be spliced, counting from 0); the last 30 bytes are RGB values.
 
 
-**22.8.31更新：**
+**22.8.31 Update:**
 
-* 添加`Test-Dynamic-fw.bin`测试固件，烧录到模块之后可以体验各种不同力反馈的滚轮效果。
+* Added `Test-Dynamic-fw.bin` test firmware. After flashing to the module, you can experience various different force feedback wheel effects.
 
-  > * 注意测试版固件会在每次上电之后校准电机，如果校准失败需要重新上电（未来正式使用的时候校准只需要一次就行了）;
-  > * 模块上两个按钮可以切换不同模式;
-  > * 硬件上有一个地方需要注意的地方是模块的fpc线一定要选短一点的，不然电阻太大会影响压降，同时需要先自己确认一下编码器是正常工作的（可以用Debug查看编码器数据）。
+  > * Note that the test version firmware will calibrate the motor after each power-on. If calibration fails, you need to power on again (in the future, calibration only needs to be done once for official use);
+  > * The two buttons on the module can switch between different modes;
+  > * One thing to note about the hardware is that the module's FPC cable must be chosen to be shorter, otherwise the resistance will be too high and affect the voltage drop. At the same time, you need to confirm that the encoder is working normally first (you can use Debug to view encoder data).
 
-**22.8.22更新：**
+**22.8.22 Update:**
 
-* 添加STEP格式的3D模型文件，全套包括定位板的模型都发出来了.
+* Added 3D model files in STEP format. The full set of models including the positioning plate have been released.
 
-**22.8.20更新：**
+**22.8.20 Update:**
 
-* PCB工程更新，见仓库的工程链接，所有元器件能在立创直接下单的都改成了对应的封装，方便大家配置BOM.
+* PCB project updated, see the project link in the repository. All components that can be directly ordered from LCEDA have been changed to corresponding packages to facilitate BOM configuration.
 
-**22.8.13更新：**
+**22.8.13 Update:**
 
-* 新打样的PCB已经收到，但是由于何同学这周发视频，为了避免带来不必要的压力，所以决定错峰下周六再把PCB工程更新（doge）.
+* The newly sampled PCBs have been received, but due to He Tong's video release this week, in order to avoid unnecessary pressure, it was decided to delay updating the PCB project to next Saturday (doge).
 
-**22.7.31更新：**
+**22.7.31 Update:**
 
-* 添加键盘硬件所有设计原理图文件（电路还有些bug没修复，如视频里的飞线，会晚些等新版PCB打样收到验证没问题后更新）
-* 添加键盘固件源代码
-* 添加Dynamic组件源代码
+* Added all design schematic files for keyboard hardware (there are still some bugs in the circuit that haven't been fixed, such as the flying wires in the video, which will be updated later after the new version PCB is sampled and verified)
+* Added keyboard firmware source code
+* Added Dynamic component source code
 
-### 1.1 项目文件说明：
+### 1.1 Project File Description:
 
 #### 1.1.1 Hardware
 
-Hardware文件夹内是瀚文键盘里面用到的所有电路的原理图和PCB文件，目前提供的是[立创EDA专业版](https://oshwhub.com/pengzhihui/b11afae464c54a3e8d0f77e1f92dc7b7)格式的源文件以及Gerber格式的光绘文件用于提供给厂家进行直接加工。
+The Hardware folder contains the schematics and PCB files for all the circuits used in the HanWen keyboard. Currently, source files in [LCEDA Professional](https://oshwhub.com/pengzhihui/b11afae464c54a3e8d0f77e1f92dc7b7) format and Gerber format photolithography files are provided for direct processing by manufacturers.
 
 ![hw0](5.Docs/2.Images/hw5.png)
 
-一共有如下几块板子：
+There are several boards in total:
 
-- **HelloWord-Keyboard**：主键盘的PCB，控制器为STM32F103，可以配合底座单独使用，提供常规按键输入功能，带全按键独立RGB灯。
-- **HelloWord-Ctrl**：左侧Dynamic组件的PCB，控制器为STM32F405，可以配合底座单独使用，提供FOC力反馈旋钮、电子墨水屏显示、OLED显示、RGB灯等功能。
-- **HelloWord-Connector**：主键盘用于连接底座的触点PCB，通过FFC排线与键盘PCB连接。
-- **HelloWord-Connector-Ctrl**：Dynamic组件用于连接底座的触点PCB，通过FFC排线与Dynamic组件PCB连接。
-- **HelloWord-Encoder**：磁编码器PCB，用于对无刷电机进行位置反馈，需要配合一个径向充磁的永磁铁工作。
-- **HelloWord-Hub1**：底座上扩展出的两个额外USB-A接口转接PCB，通过FFC排线和TypeC接口板连接。
-- **HelloWord-Hub2**：底座上扩展出的两个额外USB-A接口的母座PCB，预留的是USB3.0母座和引脚，但是目前只使用到了2.0接口，未来可以升级到USB3.0的HUB。
-- **HelloWord-TypeC**：底座上用于连接电脑的TypeC接口PCB，板载了电源充电管理芯片，以及USB-HUB芯片，通过FFC排线连接其余模块。
-- **HelloWord-OLED**：Dynamic组件上OLED屏幕的最小驱动电路以及转接板。
-- **HelloWord-TouchBar**：可选的电容触摸条模块PCB，使用6按键电容触摸芯片组成一个线性感应阵列，通过FFC排线和主键盘PCB连接。
+- **HelloWord-Keyboard**: The main keyboard PCB, controlled by STM32F103, can be used independently with the base, providing conventional key input functions, with independent RGB lights for all keys.
+- **HelloWord-Ctrl**: The PCB for the Dynamic component on the left side, controlled by STM32F405, can be used independently with the base, providing FOC force feedback knob, e-ink screen display, OLED display, RGB lights and other functions.
+- **HelloWord-Connector**: The contact PCB used to connect the base to the main keyboard, connected to the keyboard PCB via FFC cable.
+- **HelloWord-Connector-Ctrl**: The contact PCB used to connect the base to the Dynamic component, connected to the Dynamic component PCB via FFC cable.
+- **HelloWord-Encoder**: Magnetic encoder PCB, used for position feedback of the brushless motor, needs to work with a radially magnetized permanent magnet.
+- **HelloWord-Hub1**: Adapter PCB for two additional USB-A interfaces expanded from the base, connected to the Type-C interface board via FFC cable.
+- **HelloWord-Hub2**: Mother socket PCB for two additional USB-A interfaces expanded from the base, reserved for USB3.0 female socket and pins, but currently only using 2.0 interface, can be upgraded to USB3.0 HUB in the future.
+- **HelloWord-TypeC**: Type-C interface PCB on the base used to connect to the computer, with onboard power charging management chip and USB-HUB chip, connected to other modules via FFC cable.
+- **HelloWord-OLED**: Minimal drive circuit and adapter board for the OLED screen on the Dynamic component.
+- **HelloWord-TouchBar**: Optional capacitive touch bar module PCB, using a 6-key capacitive touch chip to form a linear sensing array, connected to the main keyboard PCB via FFC cable.
 
 #### 1.1.2 Firmware
 
-Firmware中提供了上面所有板子的固件源码，以及**预编译好的bin固件**可以直接烧录，主要包含以下两个工程：
+Firmware provides the firmware source code for all the above boards, as well as **pre-compiled bin firmware** that can be directly flashed. It mainly contains the following two projects:
 
-* **HelloWord-Keyboard-fw**：主键盘的固件，主要实现了基于硬件SPI和移位寄存器的高速按键扫描、基于硬件SPI&DMA的总线式RGB灯控制、HID高速设备键盘枚举&报文协议实现、非易失存储配置、多层按键映射等功能。
-* **HelloWord-Dynamic-fw：**Dynamic组件的固件，主要实现了基于FOC的电机控制代码、可配置触感封装类、电子墨水屏驱动、OLED驱动、USB全速复合设备枚举和通信协议、RGB灯控制等功能。
+* **HelloWord-Keyboard-fw**: Firmware for the main keyboard, mainly implementing high-speed key scanning based on hardware SPI and shift registers, bus-type RGB light control based on hardware SPI & DMA, HID high-speed device keyboard enumeration & message protocol implementation, non-volatile storage configuration, multi-layer key mapping, etc.
+* **HelloWord-Dynamic-fw:** Firmware for the Dynamic component, mainly implementing FOC-based motor control code, configurable haptic encapsulation class, e-ink screen driver, OLED driver, USB full-speed composite device enumeration and communication protocol, RGB light control, etc.
 
-工程都是基于STM32HAL实现的，所以提供了对应的`.ioc`文件，可以自行用STM32CubeMX打开，生成对应的keil或者STM32IDE工程文件。当让也可以像我一样，用CLion或者STM32CubeIDE进行编译和下载。
+The projects are all implemented based on STM32HAL, so corresponding `.ioc` files are provided. You can open them with STM32CubeMX to generate corresponding keil or STM32IDE project files. Of course, you can also compile and download using CLion or STM32CubeIDE like me.
 
-`_Release`文件夹里是预编译好的bin文件，可以用**ST-Link Utillity**或者STM32CubeProgrammer之类的软件直接下载到芯片。
+The `_Release` folder contains pre-compiled bin files that can be directly downloaded to the chip using software like **ST-Link Utility** or STM32CubeProgrammer.
 
-关于固件的实现细节后文有讲解。
+Details about the firmware implementation will be explained later.
 
-> 把CLion变成STM32的IDE的方法参考我之前发的一篇教程：[配置CLion用于STM32开发【优雅の嵌入式开发】](https://zhuanlan.zhihu.com/p/145801160) 。
+> For the method of turning CLion into an IDE for STM32 development, refer to a tutorial I posted before: [Configuring CLion for STM32 Development【Elegant Embedded Development】](https://zhuanlan.zhihu.com/p/145801160).
 
 #### 1.1.3 Software
 
-Software中提供了一些用于和键盘交互的电脑端上位机软件，包括视频里演示的傻瓜化修改墨水屏图片的上位机软件，以及后续会逐步补充用于**修改键位的图形化软件**给**模块添加APP**的应用商店软件，这些还在开发中。
+Software provides some PC-side host computer software for interacting with the keyboard, including the idiot-proof host computer software for modifying e-ink screen images demonstrated in the video, as well as **graphical software for modifying key positions** and application store software for **adding APPs to modules** that will be gradually supplemented later. These are still under development.
 
 #### 1.1.4 Tools
 
-Tools主要是提供一些三方的工具软件，比如**STM32 ST-LINK Utility** 、用于安装驱动的**zadig**等等。
+Tools mainly provides some third-party tool software, such as **STM32 ST-LINK Utility**, **zadig** for driver installation, etc.
 
 #### 1.1.5 3D Model
 
-文件夹里是键盘用到的所有结构件的3D模型文件，可以用于3D打印。
+The folder contains 3D model files for all structural parts used in the keyboard, which can be used for 3D printing.
 
 #### 1.1.6 Docs
 
-相关的参考文件，包括芯片的Datasheet等。
+Related reference files, including chip datasheets, etc.
 
-## 2. 硬件架构说明
+## 2. Hardware Architecture Description
 
-**关于结构设计？**
+**About the structural design?**
 
-瀚文的结构包括三大部分：**扩展坞底座**、**键盘输入模块**和**可替换的多功能交互模块**，键盘输入模块和可替换的多功能交互模块通过若干接触式触点连接在所述扩展坞底座顶部：
+The structure of HanWen includes three main parts: **expansion dock base**, **keyboard input module** and **replaceable multi-functional interaction module**. The keyboard input module and replaceable multi-functional interaction module are connected to the top of the expansion dock base through several contact-type contacts:
 
 ![hw2](5.Docs/2.Images/hw2.jpg)
 
-而键盘本体也是一个标准的客制化键盘层叠结构设计，包含减震棉、PCBA、定位板、轴下垫等：
+The keyboard body itself is also a standard custom keyboard layered structure design, including damping cotton, PCBA, positioning plate, switch pad, etc.:
 
 ![hw2](5.Docs/2.Images/hw3.jpg)
 
-键盘的结构设计主要是Xikii根据S98修改而来，为75键布局，有其他布局需要的同学可以自行修改PCB和固件适配。
+The keyboard structure design is mainly modified by Xikii based on S98, with a 75-key layout. Students who need other layouts can modify the PCB and firmware to adapt.
 
-> 关于视频中展示的结构件，由于是Xikii的方案所以我也不好擅自把源文件放出，而且原始版本结构是用于CNC机加工的，成本会比较高。
+> Regarding the structural parts shown in the video, since it's Xikii's solution, I don't feel right to release the source files without permission. Moreover, the original version structure is for CNC machining, which would be quite costly.
 >
-> 所以我也让Xikii帮忙设计一套简化版可用于3D的结构件，并开源出来放到仓库。
+> So I also asked Xikii to help design a simplified version that can be used for 3D printing, and open source it in the repository.
 
-**关于芯片选型？**
+**About chip selection?**
 
-- 键盘主控选用的芯片是STM32F103CBT6，实际上C8T6也可以，不过考虑到未来固件功能的扩展性，Flash大一倍的CBT6性价比更高。这块由于我固件基本都是使用HAL库实现的，因此实际上也可以把主控替换成STM32系列的任何一款芯片，需要支芯片有2个SPI硬件接口分别用于按键扫描以及RGB灯驱动，以及一个全速USB接口即可。
-- Dynamic组件主控的STM32F4，这个是因为我手边这款芯片比较多，理论上可以替换为性价比更高的F1系列的，只要芯片具备一个高级定时器用于PWM生成、2个硬件SPI接口用于编码器和电子墨水屏通信、一个I2C接口用于OLED驱动，以及一个全速USB接口即可。
-- 电机的磁编码器芯片我是使用AS5047P，也是一款很常用性能很好的磁编码芯片，不过成本略高，我只是因为手边有所以选了这款，也是可以修改为其他更便宜的型号的比如MT6816等，当然也需要修改固件驱动代码。
-- 按键扫描用的移位寄存器使用的74HC165，国产芯片零售的话大概0.5元一片，一片可以驱动8个按键，按照你自己需要的按键数目修改串联的寄存器芯片即可。进口的165比如TI原装的要比国产贵一些，性能也会稍微好点，不过由于本项目中按键扫描频率4MHz已经完全够用了，因此哪怕国产的16MHz芯片也绰绰有余了。
-- 电容触摸板使用的是一个6通道电容触摸按键芯片XW06A实现的，这个对于PCB感应盘的设计有一定要求，仓库已经提供了设计好的PCB。对于该芯片的读取方式，其实和普通按键没有区别，所以本方案中也是使用74HC165进行扫描读取的。
-- 电机FOC驱动电路完全是从我的Ctrl驱动器中移植过来的，使用FD8288Q作为栅极驱动器，无需电流传感器。
+- The main controller chip chosen for the keyboard is STM32F103CBT6. Actually C8T6 would work too, but considering the future expandability of firmware functions, CBT6 with twice the Flash is more cost-effective. Since I implemented most of the firmware using the HAL library, the main controller can actually be replaced with any chip in the STM32 series, as long as the chip has 2 SPI hardware interfaces for key scanning and RGB light driving respectively, and a full-speed USB interface.
+- The STM32F4 for the Dynamic component main controller is because I have a lot of this chip on hand. Theoretically it can be replaced with a more cost-effective F1 series, as long as the chip has an advanced timer for PWM generation, 2 hardware SPI interfaces for encoder and e-ink screen communication, an I2C interface for OLED driving, and a full-speed USB interface.
+- For the magnetic encoder chip of the motor, I'm using AS5047P, which is also a very commonly used high-performance magnetic encoder chip, but the cost is slightly higher. I only chose this one because I had it on hand. It can also be modified to other cheaper models such as MT6816, etc., of course, the firmware driver code needs to be modified accordingly.
+- The shift register used for key scanning is 74HC165. Domestic chips cost about 0.5 yuan each in retail, and one chip can drive 8 keys. You can modify the number of cascaded register chips according to the number of keys you need. Imported 165, such as TI original, is more expensive than domestic ones and will perform slightly better, but since the key scanning frequency of 4MHz in this project is already more than enough, even domestic 16MHz chips are more than adequate.
+- The capacitive touch panel uses a 6-channel capacitive touch key chip XW06A. This has certain requirements for the design of PCB sensing pads. The repository has provided the designed PCB. As for the reading method of this chip, it's actually no different from ordinary keys, so in this scheme it's also scanned and read using 74HC165.
+- The motor FOC drive circuit is completely ported from my Ctrl driver, using FD8288Q as the gate driver, without the need for a current sensor.
 
-**关于烧录方式？**
+**About the programming method?**
 
-使用JLink、STLink之类的调试器烧录，我在PCB和外壳上都预留了SWD调试口。对于没有硬件开发经验的同学，我晚点也会放出一个Bootloader，可以直接通过USB口进行固件升级。
+Use debuggers like JLink, STLink for programming. I have reserved SWD debug ports on both the PCB and the shell. For students without hardware development experience, I will also release a Bootloader later, which can directly upgrade the firmware through the USB port.
 
-**关于电机选型？**
+**About motor selection?**
 
-我使用的是一个2204的二手电机，不过这一款电机目前好像不太好买，大家可以选取类似尺寸的无刷电机替换，参数方面需要KV值低一些，最好200左右。电机需要手动在转子上安装一个径向充磁的永磁体用于编码器定位，不同型号的电机需要对FOC参数进行一些调整。
+I'm using a second-hand 2204 motor, but this model seems to be hard to buy now. You can replace it with a similar sized brushless motor. In terms of parameters, you need a lower KV value, preferably around 200. The motor needs to manually install a radially magnetized permanent magnet on the rotor for encoder positioning. Different motor models require some adjustment of FOC parameters.
 
 ![hw2](5.Docs/2.Images/hw4.jpg)
 
-## 3. 软件架构说明
+## 3. Software Architecture Description
 
-**关于键盘固件的按键映射方式？**
+**About the key mapping method of the keyboard firmware?**
 
-为了充分发挥视频中提到的移位寄存器扫描方案的优势，固件代码中将PCB Layout走线和按键扫描顺序解耦，通过软件进行重映射。也就是说PCB中按键的连接可以是任意的，走完线之后可以在`hw_keyboard.h`文件中的`keyMap[KEYMAP_NUM][IO_NUMBER]`中指定映射方式。
+To fully utilize the advantages of the shift register scanning scheme mentioned in the video, the firmware code decouples the PCB Layout wiring and key scanning order, and remaps through software. That is to say, the connection of keys in the PCB can be arbitrary, and after wiring, the mapping method can be specified in `keyMap[KEYMAP_NUM][IO_NUMBER]` in the `hw_keyboard.h` file.
 
-> 这是一个二维数组，代表有`KEYMAP_NUM`层键位映射，每一层有`IO_NUMBER`个按键（也就是你的键盘按键数目）；其中第0层是特殊的，负责映射PCB按键的随机布局到键盘标准按键布局，后续的1、2、3、4...层都是自定义的，负责映射标准按键布局到任意布局。
+> This is a two-dimensional array, representing `KEYMAP_NUM` layers of key mappings, each layer has `IO_NUMBER` keys (that is, the number of keys on your keyboard); where the 0th layer is special, responsible for mapping the random layout of PCB keys to the standard keyboard layout, and the subsequent 1, 2, 3, 4... layers are all custom, responsible for mapping the standard key layout to any layout.
 
-**举个例子：**
+**An example:**
 
-考虑原理图中箭头指的那个按键，这个按键可以在PCB的任意位置，但是我们可以看到，它是从左到右（按74HC165的连接顺序，也即移位扫描顺序）的第10颗，因此它的编号为9（从0开始算）.
+Consider the key pointed by the arrow in the schematic, this key can be at any position on the PCB, but we can see that it is the 10th from left to right (in the order of 74HC165 connection, i.e. shift scanning order), so its number is 9 (counting from 0).
 
 ![hw2](5.Docs/2.Images/hw5.jpg)
 
-如果我们在实际的PCB板上把它放在了**右边Alt**的位置，那么参考在下图代码**红色框**中的第1层映射（也就是标准布局）中的`RIGHT_ALT`的序号是76，那么在第0层映射的76号变量就填入9（蓝色框）.
+If we placed it in the position of **right Alt** on the actual PCB board, then referring to the sequence number 76 of `RIGHT_ALT` in the 1st layer mapping (i.e. standard layout) in the **red box** in the code below, we fill in 9 (blue box) in the 76th variable of the 0th layer mapping.
 
-这样依次把你PCB上所有按键都填入0层映射，就得到了一个映射好的标准键盘了。后续2、3、4、5...层需要怎么映射就随意修改添加即可，也不需要再使用数字编号，而是可以直接用枚举的按键名称很方便。
+In this way, fill in all the keys on your PCB into the 0 layer mapping one by one, and you will get a well-mapped standard keyboard. Subsequently, how to map layers 2, 3, 4, 5... can be modified and added at will, and you don't need to use numeric numbers anymore, but can directly use the enumerated key names very conveniently.
 
-> 所以对于想修改键盘配列的人，只需要再原理图上添加或删减几个串联的74HC165，然后PCB随意走线，再将代码中0层映射删减或增加一些数字即可（比如在下面的例子中我的键盘是83键的）；后面几层的修改就以此类推了。
+> So for people who want to modify the keyboard layout, you only need to add or reduce a few cascaded 74HC165 on the schematic, then wire the PCB arbitrarily, and then delete or add some numbers in the 0 layer mapping in the code (for example, in the example below, my keyboard has 83 keys); the modification of the later layers follows this.
 
-代码中通过`keyboard.Remap`函数来映射不同层，比如`keyboard.Remap(2)`这一句是使用第2层映射。
+The code uses the `keyboard.Remap` function to map different layers, for example, the sentence `keyboard.Remap(2)` uses the 2nd layer mapping.
 
 ![hw2](5.Docs/2.Images/hw6.jpg)
 
-**关于键盘固件的滤波方法？**
+**About the filtering method of the keyboard firmware?**
 
-固件中使用了每个按键独立的滤波，但是是以一种非常高效的方式来实现的（毕竟1KHz的报文，每个报文期间至少扫描两次按键，意味着每秒钟需要进行 **1000\*2\*[按键数目]** 次数的滤波）。
+The firmware uses independent filtering for each key, but it is implemented in a very efficient way (after all, with 1KHz messages, each message period scans the keys at least twice, meaning that **1000\*2\*[number of keys]** times of filtering needs to be performed every second).
 
-基本原理很简单，就是按键抖动的原因是按下后会在高低电平之间反复横跳，这个稳定时间一般是几十us（注意是电平稳定时间，不是按键触发时间，后者是由于按键簧片接触时间的不确定性导致的，可能长达数ms）。
+The basic principle is very simple. The reason for key bounce is that after pressing, it will repeatedly jump between high and low levels, and this stabilization time is generally tens of us (note that this is the level stabilization time, not the key trigger time, the latter is due to the uncertainty of the key spring contact time, which may last for several ms).
 
-在QMK的[qmk_firmware/feature_debounce_type](https://github.com/qmk/qmk_firmware/blob/master/docs/feature_debounce_type.md)文档中描述了其使用的几种滤波方法，分为Eager和Defer、对称和非对称等，
+The [qmk_firmware/feature_debounce_type](https://github.com/qmk/qmk_firmware/blob/master/docs/feature_debounce_type.md) document in QMK describes several filtering methods it uses, divided into Eager and Defer, symmetric and asymmetric, etc.
 
-默认是使用**对称延迟全局滤波**，也就是说是对所有按键进行同等的滤波，等所有的按键都稳定了不再变化，再提交扫描数据。
+The default is to use **symmetric delay global filtering**, which means applying the same filtering to all keys, waiting until all keys are stable and no longer changing before submitting the scan data.
 
-> 与之对应的是激进滤波方法，也就是说一旦检测到按键变化就提交数据，但是在这之后的N毫秒时间内不再响应任何按键（也就避免了把不断抖动的按键提交上去）。这种方法触发延迟低，但是对噪声很敏感，容易误触发。
+> In contrast, there's the aggressive filtering method, which submits data as soon as a key change is detected, but doesn't respond to any keys for N milliseconds after that (thus avoiding submitting constantly bouncing keys). This method has low trigger delay but is very sensitive to noise and prone to false triggers.
 
-我在瀚文的固件中使用的是**对称延迟独立滤波**，也就是对每个按键进行两次检测，如果第一次检测到了按键变化，那么相隔N微秒（这个参数可以配置，大于按键典型抖动时间即可）再检测一次，如果两次检测结果一致，那么判断按键被按下，此时可以确保按键发生了变化，且不会重复触发按键，兼顾延迟和稳定性。
+In HanWen's firmware, I use **symmetric delay independent filtering**, which means performing two detections for each key. If a key change is detected in the first detection, then another detection is performed after N microseconds (this parameter can be configured, just needs to be greater than the typical key bounce time). If the results of the two detections are consistent, then it's determined that the key has been pressed. At this point, we can ensure that the key has changed and won't trigger repeatedly, balancing delay and stability.
 
-这个过程是通过异或运算进行高效处理的，正好按键buffer由于是移位寄存器扫描得到的，本身就是每一位代表一个按键，所以滤波效率非常高，实测效果也挺好的。
+This process is efficiently processed through XOR operations. Conveniently, since the key buffer is obtained from shift register scanning, each bit already represents a key, so the filtering efficiency is very high, and the actual effect is quite good.
 
 ![hw2](5.Docs/2.Images/hw7.jpg)
 
-**关于键盘固件的HID描述符？**
+**About the HID descriptor of the keyboard firmware?**
 
-这个可以直接参考源码的`usbd_customhid.c`文件，我配置了两个ReportID，ID-0是上报键位扫描数据的（全键无冲），ID-1是预留用于后续跟上位机改键软件通信用的。
+You can directly refer to the `usbd_customhid.c` file in the source code. I configured two ReportIDs: ID-0 is for reporting key scan data (N-key rollover), and ID-1 is reserved for future communication with the PC-side key remapping software.
 
-**关于RGB的控制？**
+**About RGB control?**
 
-代码中使用的是单总线的ws2812b系列灯珠，一根线就可以串联一大堆RGB，而且代码中实现了SPI-DMA模拟时序，得到了超高的刷新率。
+The code uses ws2812b series LEDs with a single bus, where a large number of RGBs can be connected in series with one wire. Moreover, the code implements SPI-DMA simulation timing, achieving an ultra-high refresh rate.
 
-目前代码里只写了一个demo灯效（非常简单就是轮询色彩），自己添加额外的灯效的话，通过`keyboard.SetRgbBuffer`函数设置RGB值，然后`SyncLights`把数据发送给LED即可：
+Currently, the code only includes a demo lighting effect (very simple, just cycling through colors). If you want to add additional lighting effects, you can set RGB values through the `keyboard.SetRgbBuffer` function, and then send the data to the LEDs with `SyncLights`:
 
-```
+```cpp
 while (true)
-    {
-        /*---- This is a demo RGB effect ----*/
-        static uint32_t t = 1;
-        static bool fadeDir = true;
+{
+    /*---- This is a demo RGB effect ----*/
+    static uint32_t t = 1;
+    static bool fadeDir = true;
 
-        fadeDir ? t++ : t--;
-        if (t > 250) fadeDir = false;
-        else if (t < 1) fadeDir = true;
+    fadeDir ? t++ : t--;
+    if (t > 250) fadeDir = false;
+    else if (t < 1) fadeDir = true;
 
-        for (uint8_t i = 0; i < HWKeyboard::LED_NUMBER; i++)
-            keyboard.SetRgbBuffer(i, HWKeyboard::Color_t{(uint8_t) t, 50, 0});
-        /*-----------------------------------*/
+    for (uint8_t i = 0; i < HWKeyboard::LED_NUMBER; i++)
+        keyboard.SetRgbBuffer(i, HWKeyboard::Color_t{(uint8_t) t, 50, 0});
+    /*-----------------------------------*/
 
-        // Send RGB buffers to LEDs
-        keyboard.SyncLights();
-    }
+    // Send RGB buffers to LEDs
+    keyboard.SyncLights();
+}
 ```
 
+## 4. SDK Design & Secondary Development
 
+To be supplemented.
 
-## 4. SDK设计 & 二次开发
-
-待补充。
-
-
-
-> 感谢以下项目：
+> Thanks to the following projects:
 >
 > [Lexikos/AutoHotkey_L: AutoHotkey - macro-creation and automation-oriented scripting utility for Windows. (github.com)](https://github.com/Lexikos/AutoHotkey_L)
 >
@@ -238,5 +234,4 @@ while (true)
 >
 > [simplefoc/Arduino FOC for BLDC  (github.com)](https://github.com/simplefoc/Arduino-FOC)
 >
-> [zhongyang219/TrafficMonitor: 这是一个用于显示当前网速、CPU及内存利用率的桌面悬浮窗软件，并支持任务栏显示，支持更换皮肤。 (github.com)](https://github.com/zhongyang219/TrafficMonitor)
-
+> [zhongyang219/TrafficMonitor: This is a utility that displays the current network speed, CPU and memory usage on the desktop taskbar. It also supports skin customization. (github.com)](https://github.com/zhongyang219/TrafficMonitor)
